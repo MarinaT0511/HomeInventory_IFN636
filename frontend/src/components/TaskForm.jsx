@@ -20,23 +20,23 @@ const TaskForm = ({ tasks, setTasks, editingTask, setEditingTask }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      if (editingTask) {
-        const response = await axiosInstance.put(`/api/tasks/${editingTask._id}`, formData, {
-          headers: { Authorization: `Bearer ${user.token}` },
-        });
-        setTasks(tasks.map((task) => (task._id === response.data._id ? response.data : task)));
-      } else {
-        const response = await axiosInstance.post('/api/tasks', formData, {
-          headers: { Authorization: `Bearer ${user.token}` },
-        });
-        setTasks([...tasks, response.data]);
-      }
-      setEditingTask(null);
-      setFormData({ title: '', description: '', deadline: '' });
-    } catch (error) {
-      alert('Failed to save task.');
+    // try {
+    if (editingTask) {
+      const response = await axiosInstance.put(`/api/tasks/${editingTask._id}`, formData, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+      setTasks(tasks.map((task) => (task._id === response.data._id ? response.data : task)));
+    } else {
+      const response = await axiosInstance.post('/api/tasks', formData, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+      setTasks([...tasks, response.data]);
     }
+    setEditingTask(null);
+    setFormData({ title: '', description: '', deadline: '' });
+    // } catch (error) {
+    //   alert('Failed to save task.');
+    // }
   };
 
   return (
@@ -44,22 +44,46 @@ const TaskForm = ({ tasks, setTasks, editingTask, setEditingTask }) => {
       <h1 className="text-2xl font-bold mb-4">{editingTask ? 'Your Form Name: Edit Operation' : 'Your Form Name: Create Operation'}</h1>
       <input
         type="text"
-        placeholder="Title"
-        value={formData.title}
-        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+        placeholder="Washing Machine"
+        value={formData.itemName}
+        onChange={(e) => setFormData({ ...formData, itemName: e.target.value })}
         className="w-full mb-4 p-2 border rounded"
       />
+      <select>
+        <option value="livingRoom" selected>Living room</option>
+        <option value="kitchen">Kitchen</option>
+        <option value="bathRoom">Bath room</option>
+        <option value="bedRoom">Bed room</option>
+      </select>
+
+      <input
+        type="price"
+        placeholder="$1.000"
+        value={formData.itemPrice}
+        onChange={(e) => setFormData({ ...formData, itemPrice: e.target.value })}
+        className="w-full mb-4 p-2 border rounded"
+      />
+
       <input
         type="text"
-        placeholder="Description"
-        value={formData.description}
-        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+        placeholder="ABC123D"
+        value={formData.modelNum}
+        onChange={(e) => setFormData({ ...formData, modelNum: e.target.value })}
         className="w-full mb-4 p-2 border rounded"
       />
+
+      <input
+        type="text"
+        placeholder="S/N123456789"
+        value={formData.serialNum}
+        onChange={(e) => setFormData({ ...formData, serialNum: e.target.value })}
+        className="w-full mb-4 p-2 border rounded"
+      />
+
       <input
         type="date"
-        value={formData.deadline}
-        onChange={(e) => setFormData({ ...formData, deadline: e.target.value })}
+        value={formData.purchaseDate}
+        onChange={(e) => setFormData({ ...formData, purchaseDate: e.target.value })}
         className="w-full mb-4 p-2 border rounded"
       />
       <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
