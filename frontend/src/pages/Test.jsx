@@ -2,8 +2,9 @@ import Inventory from "../components/Inventory";
 
 function Test() {
     return (
-        <div style={{ padding: "40px" }}>
-            <Inventory />
+        <div>
+            <DemoPaper square={false}>rounded corners</DemoPaper>
+            <DemoPaper square>square corners</DemoPaper>
         </div>
     );
 }
