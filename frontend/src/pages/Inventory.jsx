@@ -1,6 +1,6 @@
-import Inventory from "../components/Inventory";
+import ItemList from "../components/ItemList";
 
-function ItemList() {
+function Inventory() {
     const handleSubmit = async (e) => {
 
     };
@@ -13,10 +13,10 @@ function ItemList() {
                         Add New Item
                     </button>
                 </form>
-                <Inventory />
+                <ItemList />
             </div>
         </div>
     );
 }
 
-export default ItemList;
+export default Inventory;

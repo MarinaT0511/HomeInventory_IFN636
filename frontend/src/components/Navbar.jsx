@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -18,12 +19,20 @@ const Navbar = () => {
           <>
             <Link to="/tasks" className="mr-4">CRUD</Link>
             <Link to="/profile" className="mr-4">Profile</Link>
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 px-4 py-2 rounded hover:bg-red-700"
-            >
-              Logout
-            </button>
+            <Dropdown>
+              <Dropdown.Toggle variant="success" id="dropdown-basic">
+                Dropdown Button
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  href="#/action-1">Go to profile
+                </Dropdown.Item>
+                <Dropdown.Item
+                  href="#/action-2" onClick={handleLogout} className="bg-red-500 px-4 py-2 rounded hover:bg-red-700">Log out
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </>
         ) : (
           <>

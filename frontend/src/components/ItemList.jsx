@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { AllCommunityModule } from "ag-grid-community";
 import { AgGridProvider, AgGridReact } from "ag-grid-react";
-import "../inventory.css";
+import "../itemlist.css";
+import { useNavigate } from "react-router-dom";
 
 // import "ag-grid-community/styles/ag-grid.css";
 // import "ag-grid-community/styles/ag-theme-alpine.css";
 
-function Inventory() {
+function ItemList() {
+    const navigate = useNavigate();
     const [rowData] = useState([
-        { id: "Tesla", itemName: "Model Y", category: "living", price: 64950, lastUpdate: "01/04/2026" },
-        { id: "Ford", itemName: "F-Series", category: "living", price: 33850, lastUpdate: "01/04/2026" },
-        { id: "Toyota", itemName: "Corolla", category: "kitchen", price: 29600, lastUpdate: "01/04/2026" },
+        { id: "01", itemName: "Model Y", category: "living", price: 64950, lastUpdate: "01/04/2026" },
+        { id: "02", itemName: "F-Series", category: "living", price: 33850, lastUpdate: "01/04/2026" },
+        { id: "03", itemName: "Corolla", category: "kitchen", price: 29600, lastUpdate: "01/04/2026" },
     ]);
 
     const [colDefs] = useState([
@@ -23,9 +25,12 @@ function Inventory() {
             headerName: "Actions",
             width: 120,
             cellClass: "actions-cell",
-            cellRenderer: () => (
+            cellRenderer: (params) => (
                 <div className="actions-inner">
-                    <button className="action-btn">›</button>
+                    <button
+                        className="action-btn"
+                        onClick={() => navigate(`/item/${params.data.id}`)}
+                    >›</button>
                 </div>
             ),
         }
@@ -44,4 +49,4 @@ function Inventory() {
     );
 }
 
-export default Inventory;
+export default ItemList;

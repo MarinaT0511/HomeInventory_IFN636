@@ -1,10 +1,7 @@
-import Inventory from "../components/Inventory";
-
 function Test() {
     return (
-        <div>
-            <DemoPaper square={false}>rounded corners</DemoPaper>
-            <DemoPaper square>square corners</DemoPaper>
+        <div className="container mt-4">
+            <button className="btn btn-primary">Hello</button>
         </div>
     );
 }
