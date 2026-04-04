@@ -21,8 +21,9 @@ function App() {
         <Route path="/inventory" element={<Inventory />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/test" element={<Test />} />
-
-        <Route path="/inventory/item/:id" element={<ItemDetail />} />
+        <Route path="/inventory/item/new" element={<ItemDetail mode="create" />} />
+        <Route path="/inventory/item/:itemId" element={<ItemDetail mode="view" />} />
+        <Route path="/inventory/item/:itemId/edit" element={<ItemDetail mode="edit" />} />
       </Routes>
     </Router>
   );

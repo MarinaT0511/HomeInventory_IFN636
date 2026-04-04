@@ -87,7 +87,7 @@ const updateUserProfile = async (req, res) => {
 };
 
 //get all users for user list (except for password)
-const getUsers = async (req, res) => {
+const getUserList = async (req, res) => {
     try {
         console.log('getUsers controller started');
         const users = await User.find().select('-password');
@@ -99,12 +99,10 @@ const getUsers = async (req, res) => {
     }
 };
 
-
-
 module.exports = {
     registerUser,
     loginUser,
     updateUserProfile,
     getProfile,
-    getUsers
+    getUserList
 };

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AllCommunityModule } from "ag-grid-community";
 import { AgGridProvider, AgGridReact } from "ag-grid-react";
 import "../itemlist.css";
@@ -9,18 +10,20 @@ import { useNavigate } from "react-router-dom";
 
 function ItemList() {
     const navigate = useNavigate();
-    const [rowData] = useState([
-        { id: "01", itemName: "Model Y", category: "living", price: 64950, lastUpdate: "01/04/2026" },
-        { id: "02", itemName: "F-Series", category: "living", price: 33850, lastUpdate: "01/04/2026" },
-        { id: "03", itemName: "Corolla", category: "kitchen", price: 29600, lastUpdate: "01/04/2026" },
-    ]);
 
+    //setting to display DB data
+    // const [rowData] = useState([
+
+    //setting to display DB data
+    const [rowData, setRowData] = useState([]);
+
+    //setting field title 
     const [colDefs] = useState([
-        { field: "id", headerName: "ID", editable: false },
+        { field: "itemId", headerName: "ID", editable: false },
         { field: "itemName", headerName: "Item Name", editable: false },
         { field: "category", headerName: "Category", editable: false },
         { field: "price", headerName: "Price", editable: false },
-        { field: "lastUpdate", headerName: "Last Update", editable: false },
+        { field: "lastUpdateDate", headerName: "Last Update", editable: false },
         {
             headerName: "Actions",
             width: 120,
@@ -29,12 +32,29 @@ function ItemList() {
                 <div className="actions-inner">
                     <button
                         className="action-btn"
-                        onClick={() => navigate(`/item/${params.data.id}`)}
+                        onClick={() => navigate(`/inventory/item/${params.data.itemId}`)}
                     >›</button>
                 </div>
             ),
         }
     ]);
+
+    useEffect(() => {
+        console.log("useEffect is running");
+        const fetchItem = async () => {
+            try {
+                const res = await fetch("http://localhost:5001/api/item/itemlist");
+                const data = await res.json();
+
+                console.log("API response:", data);
+                setRowData(data);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        fetchItem();
+    }, []);
 
     return (
         <AgGridProvider modules={[AllCommunityModule]}>

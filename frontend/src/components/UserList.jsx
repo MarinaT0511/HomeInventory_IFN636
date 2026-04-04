@@ -5,12 +5,11 @@ import { AgGridProvider, AgGridReact } from "ag-grid-react";
 // import "../inventory.css";
 
 function UserList() {
-    console.log("UserList component rendered");
     //setting to display DB data
     const [rowData, setRowData] = useState([
     ]);
 
-    //setting field title (col data in user list)
+    //setting field title 
     const [colDefs] = useState([
         { field: "userId", headerName: "UserID", },
         { field: "name", headerName: "User Name" },
@@ -33,7 +32,7 @@ function UserList() {
         console.log("useEffect is running");
         const fetchUsers = async () => {
             try {
-                const res = await fetch("http://localhost:5001/api/auth/users");
+                const res = await fetch("http://localhost:5001/api/auth/userlist");
                 const data = await res.json();
 
                 console.log("API response:", data);

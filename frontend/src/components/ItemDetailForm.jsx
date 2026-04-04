@@ -1,12 +1,25 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
-import axiosInstance from '../axiosConfig';
 
-const ItemDetailForm = ({ tasks, setTasks, editingTask, setEditingTask }) => {
-  const { user } = useAuth();
+const categoryMap = {
+  C001: "livingRoom",
+  C002: "kitchen",
+  C003: "bathRoom",
+  C004: "bedRoom",
+};
+
+const ItemDetailForm = ({
+  initialData,
+  onSubmit,
+  onDelete,
+  onCancel,
+  onEdit,
+  isEditMode,
+  readOnly
+}) => {
   const [formData, setFormData] = useState({
     itemName: "",
     category: "",
+    shop: "",
     itemPrice: "",
     modelNum: "",
     serialNum: "",
@@ -14,80 +27,69 @@ const ItemDetailForm = ({ tasks, setTasks, editingTask, setEditingTask }) => {
   });
 
   useEffect(() => {
-    if (editingTask) {
+    if (initialData) {
       setFormData({
-        itemName: editingTask.itemName || "",
-        category: editingTask.category || "",
-        itemPrice: editingTask.itemPrice || "",
-        modelNum: editingTask.modelNum || "",
-        serialNum: editingTask.serialNum || "",
-        purchaseDate: editingTask.purchaseDate || "",
+        itemName: initialData.itemName || "",
+        category: categoryMap[initialData.category] || "",
+        shop: initialData.shop || "",
+        itemPrice: initialData.itemPrice || "",
+        modelNum: initialData.modelNum || "",
+        serialNum: initialData.serialNum || "",
+        purchaseDate: initialData.purchaseDate
+          ? initialData.purchaseDate.slice(0, 10)
+          : '',
       });
     } else {
       setFormData({
         itemName: "",
         category: "",
+        shop: "",
         itemPrice: "",
         modelNum: "",
         serialNum: "",
         purchaseDate: "",
       });
     }
-  }, [editingTask]);
+  }, [initialData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      if (editingTask) {
-        const response = await axiosInstance.put(
-          `/api/tasks/${editingTask._id}`,
-          formData,
-          {
-            headers: { Authorization: `Bearer ${user.token}` },
-          });
-
-        setTasks(tasks.map((task) =>
-          (task._id === response.data._id ? response.data : task)));
-      } else {
-        const response = await axiosInstance.post('/api/tasks', formData, {
-          headers: { Authorization: `Bearer ${user.token}` },
-        });
-        setTasks([...tasks, response.data]);
-      }
-      setEditingTask(null);
-      setFormData({
-        itemName: "",
-        category: "",
-        itemPrice: "",
-        modelNum: "",
-        serialNum: "",
-        purchaseDate: "",
-      });
-    } catch (error) {
-      alert('Failed to save task.');
-    }
+    onSubmit(formData);
   };
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded mb-6">
       <div>
-        <h1 className="text-2xl font-bold mb-4">ITM0001:ItemNum</h1>
-        <h1 className="text-2xl font-bold mb-4">{editingTask ? 'Item Name: Edit Operation' : 'Item Name: Create Operation'}</h1>
-        <h1 className="text-2xl font-bold mb-4">{editingTask ? 'Category: Edit Operation' : ''}</h1>
-        <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
-          Delete
-        </button>
+        <h1 className="text-2xl font-bold mb-4">
+          {initialData?.itemId || "New Item"}
+          : {readOnly ? "View Item"
+            : isEditMode ? "Edit Item" : "Create Item"
+          }
+          {/* {initialData?.itemId || "New Item"} : {formData.itemName || ""} */}
+        </h1>
+
+        {isEditMode && (
+          <button
+            type="button"
+            onClick={onDelete}
+            className="w-full bg-blue-600 text-white p-2 rounded"
+          >
+            Delete
+          </button>
+        )}
       </div>
 
       <input
         type="text"
         placeholder="Washing Machine"
         value={formData.itemName}
+        readOnly={readOnly}
         onChange={(e) => setFormData({ ...formData, itemName: e.target.value })}
         className="w-full mb-4 p-2 border rounded"
       />
       <select
         value={formData.category}
+        disabled={readOnly}
         onChange={(e) => setFormData({ ...formData, category: e.target.value })}
         className="w-full mb-4 p-2 border rounded"
       >
@@ -99,9 +101,19 @@ const ItemDetailForm = ({ tasks, setTasks, editingTask, setEditingTask }) => {
       </select>
 
       <input
-        type="price"
+        type="text"
+        placeholder="JB HI-FI"
+        value={formData.shop}
+        readOnly={readOnly}
+        onChange={(e) => setFormData({ ...formData, shop: e.target.value })}
+        className="w-full mb-4 p-2 border rounded"
+      />
+
+      <input
+        type="number"
         placeholder="$1.000"
         value={formData.itemPrice}
+        readOnly={readOnly}
         onChange={(e) => setFormData({ ...formData, itemPrice: e.target.value })}
         className="w-full mb-4 p-2 border rounded"
       />
@@ -110,6 +122,7 @@ const ItemDetailForm = ({ tasks, setTasks, editingTask, setEditingTask }) => {
         type="text"
         placeholder="ABC123D"
         value={formData.modelNum}
+        readOnly={readOnly}
         onChange={(e) => setFormData({ ...formData, modelNum: e.target.value })}
         className="w-full mb-4 p-2 border rounded"
       />
@@ -118,6 +131,7 @@ const ItemDetailForm = ({ tasks, setTasks, editingTask, setEditingTask }) => {
         type="text"
         placeholder="S/N123456789"
         value={formData.serialNum}
+        readOnly={readOnly}
         onChange={(e) => setFormData({ ...formData, serialNum: e.target.value })}
         className="w-full mb-4 p-2 border rounded"
       />
@@ -125,15 +139,33 @@ const ItemDetailForm = ({ tasks, setTasks, editingTask, setEditingTask }) => {
       <input
         type="date"
         value={formData.purchaseDate}
+        disabled={readOnly}
         onChange={(e) => setFormData({ ...formData, purchaseDate: e.target.value })}
         className="w-full mb-4 p-2 border rounded"
       />
-      <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
-        Cancel
+      <button type="button"
+        onClick={onCancel}
+        className="w-full bg-blue-600 text-white p-2 rounded"
+      >
+        {readOnly ? 'Go back to inventory' : 'Cancel'}
       </button>
-      <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
-        {editingTask ? 'Update Button' : 'Create Button'}
-      </button>
+
+      {readOnly && (
+        <button type="button"
+          onClick={onEdit}
+          className="w-full bg-blue-600 text-white p-2 rounded"
+        >
+          Change the detail
+        </button>
+      )}
+
+      {!readOnly && (
+        <button type="submit"
+          className="w-full bg-blue-600 text-white p-2 rounded"
+        >
+          {isEditMode ? 'Update' : 'Create'}
+        </button>
+      )}
     </form>
   );
 };
