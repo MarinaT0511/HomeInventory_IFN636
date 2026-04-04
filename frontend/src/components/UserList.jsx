@@ -1,25 +1,22 @@
-import React, { useState } from "react";
+// import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AllCommunityModule } from "ag-grid-community";
 import { AgGridProvider, AgGridReact } from "ag-grid-react";
 // import "../inventory.css";
 
-// import "ag-grid-community/styles/ag-grid.css";
-// import "ag-grid-community/styles/ag-theme-alpine.css";
-
 function UserList() {
-    const [rowData] = useState([
-        { id: "Tesla", userName: "Model Y", email: "living", itemNum: 64950, status: "active", lastUpdate: "01/04/2026" },
-        { id: "Ford", userName: "F-Series", email: "living", itemNum: 33850, status: "active", lastUpdate: "01/04/2026" },
-        { id: "Toyota", userName: "Corolla", email: "kitchen", itemNum: 29600, status: "active", lastUpdate: "01/04/2026" },
+    console.log("UserList component rendered");
+    //setting to display DB data
+    const [rowData, setRowData] = useState([
     ]);
 
+    //setting field title (col data in user list)
     const [colDefs] = useState([
-        { field: "id", headerName: "UserID", editable: false },
-        { field: "userName", headerName: "Item Name", editable: false },
-        { field: "email", headerName: "email", editable: false },
-        { field: "itemNum", headerName: "itemNum", editable: false },
-        { field: "status", headerName: "status", editable: false },
-        { field: "lastUpdate", headerName: "Last Update", editable: false },
+        { field: "userId", headerName: "UserID", },
+        { field: "name", headerName: "User Name" },
+        { field: "email", headerName: "Email" },
+        { field: "userStatus", headerName: "Status" },
+        { field: "role", headerName: "Role" },
         {
             headerName: "Go to Detail",
             width: 120,
@@ -31,6 +28,23 @@ function UserList() {
             ),
         }
     ]);
+
+    useEffect(() => {
+        console.log("useEffect is running");
+        const fetchUsers = async () => {
+            try {
+                const res = await fetch("http://localhost:5001/api/auth/users");
+                const data = await res.json();
+
+                console.log("API response:", data);
+                setRowData(data);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        fetchUsers();
+    }, []);
 
     return (
         <AgGridProvider modules={[AllCommunityModule]}>
