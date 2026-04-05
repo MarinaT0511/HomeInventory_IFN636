@@ -243,7 +243,7 @@ describe('DeleteItem Function Test', () => {
         await deleteItem(req, res);
 
         // Assertions
-        expect(findOneStub.calledOnceWith(req.params.id)).to.be.true;
+        expect(findOneStub.calledOnceWith(req.params.itemId)).to.be.true;
         // expect(item.remove.calledOnce).to.be.true;
         expect(res.json.calledWith({ message: 'Item deleted' })).to.be.true;
 
@@ -256,7 +256,7 @@ describe('DeleteItem Function Test', () => {
         const findOneStub = sinon.stub(Item, 'findOneAndDelete').resolves(null);
 
         // Mock request data
-        const req = { params: { id: new mongoose.Types.ObjectId().toString() } };
+        const req = { params: { itemId: new mongoose.Types.ObjectId().toString() } };
 
         // Mock response object
         const res = {
@@ -268,7 +268,7 @@ describe('DeleteItem Function Test', () => {
         await deleteItem(req, res);
 
         // Assertions
-        expect(findOneStub.calledOnceWith(req.params.id)).to.be.true;
+        expect(findOneStub.calledOnceWith(req.params.itemId)).to.be.true;
         expect(res.status.calledWith(404)).to.be.true;
         expect(res.json.calledWith({ message: 'Item not found' })).to.be.true;
 
