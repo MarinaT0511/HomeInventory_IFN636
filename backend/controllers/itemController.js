@@ -118,9 +118,12 @@ const deleteItem = async (req, res) => {
     try {
         console.log("starting delete")
         const item = await Item.findOneAndDelete({ itemId: req.params.itemId });
-        if (!item) return res.status(400).json({ message: 'Item not found' });
-
-        res.json({ item });
+        // if (!item) return res.status(400).json({ message: 'Item not found' });
+        // res.json({ item });
+        if (!deletedItem) {
+            return res.status(404).json({ message: 'Item not found' });
+        }
+        res.json({ message: 'Item deleted' });
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: error.message });
