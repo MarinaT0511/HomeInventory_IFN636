@@ -231,7 +231,7 @@ describe('DeleteItem Function Test', () => {
         const item = { remove: sinon.stub().resolves() };
 
         // Stub Item.findOne to return the mock item
-        const findOneStub = sinon.stub(Item, 'findOne').resolves(item);
+        const findOneStub = sinon.stub(Item, 'findOneAndDelete').resolves(item);
 
         // Mock response object
         const res = {
@@ -253,7 +253,7 @@ describe('DeleteItem Function Test', () => {
 
     it('should return 404 if item is not found', async () => {
         // Stub Item.findOne to return null
-        const findOneStub = sinon.stub(Item, 'findOne').resolves(null);
+        const findOneStub = sinon.stub(Item, 'findOneAndDelete').resolves(null);
 
         // Mock request data
         const req = { params: { id: new mongoose.Types.ObjectId().toString() } };
@@ -278,7 +278,7 @@ describe('DeleteItem Function Test', () => {
 
     it('should return 500 if an error occurs', async () => {
         // Stub Item.findOne to throw an error
-        const findOneStub = sinon.stub(Item, 'findOne').throws(new Error('DB Error'));
+        const findOneStub = sinon.stub(Item, 'findOneAndDelete').throws(new Error('DB Error'));
 
         // Mock request data
         const req = { params: { id: new mongoose.Types.ObjectId().toString() } };
