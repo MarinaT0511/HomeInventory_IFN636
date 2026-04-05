@@ -3,11 +3,10 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import UserList from "../components/UserList";
+import { useNavigate } from 'react-router-dom';
 
 function AdminDashboard() {
-    const handleSubmit = async (e) => {
-
-    };
+    const navigate = useNavigate();
     return (
         <div>
             <div className="flex justify-center">
@@ -43,8 +42,12 @@ function AdminDashboard() {
             {/* Admin feature: User Management */}
             <div class>
                 <div className="flex justify-end ml-10 mr-10 mt-2">
-                    <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded" style={{ boxShadow: 'none' }}>
-                        <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded" >
+                    <form className="bg-white p-6 shadow-md rounded" style={{ boxShadow: 'none' }}>
+                        <button
+                            type="button"
+                            className="w-full bg-blue-600 text-white p-2 rounded"
+                            onClick={() => navigate(`/register`)}
+                        >
                             Add New Item
                         </button>
                     </form>

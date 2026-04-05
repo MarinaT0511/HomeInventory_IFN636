@@ -16,7 +16,6 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:userId" element={<Profile />} />
-        {/* <Route path="/itemdetail" element={<ItemDetail />} /> */}
         <Route path="/inventory" element={<Inventory />} />
         <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/inventory/item/new" element={<ItemDetail mode="create" />} />

@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../axiosConfig';
+import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -10,12 +12,17 @@ const Register = () => {
   });
   const navigate = useNavigate();
 
+  const getPreviousPath = () => {
+    if (user.role === "R001") return "/admindashboard";
+    return "/login";
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axiosInstance.post('/api/auth/register', formData);
       alert('Registration successful. Please log in.');
-      navigate('/login');
+      navigate(getPreviousPath());
     } catch (error) {
       alert('Registration failed. Please try again.');
     }
