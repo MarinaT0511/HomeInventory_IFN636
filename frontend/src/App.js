@@ -3,7 +3,11 @@ import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
-import Tasks from './pages/Tasks';
+import ItemDetail from './pages/ItemDetail';
+import Inventory from './pages/Inventory';
+import AdminDashboard from './pages/AdminDashboard';
+
+import Test from "./pages/Test";
 
 function App() {
   return (
@@ -13,7 +17,13 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/tasks" element={<Tasks />} />
+        <Route path="/profile/:userId" element={<Profile />} />
+        {/* <Route path="/itemdetail" element={<ItemDetail />} /> */}
+        <Route path="/inventory" element={<Inventory />} />
+        <Route path="/admindashboard" element={<AdminDashboard />} />
+        <Route path="/inventory/item/new" element={<ItemDetail mode="create" />} />
+        <Route path="/inventory/item/:itemId" element={<ItemDetail mode="view" />} />
+        <Route path="/inventory/item/:itemId/edit" element={<ItemDetail mode="edit" />} />
       </Routes>
     </Router>
   );

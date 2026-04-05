@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../axiosConfig';
-import TaskForm from '../components/TaskForm';
+import TaskForm from '../components/ItemDetailForm';
 import TaskList from '../components/TaskList';
 import { useAuth } from '../context/AuthContext';
 
