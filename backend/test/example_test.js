@@ -8,6 +8,11 @@ const { updateItem, getItems, addItem, deleteItem } = require('../controllers/it
 const { expect } = chai;
 
 chai.use(chaiHttp);
+
+afterEach(() => {
+    sinon.restore();
+});
+
 let server;
 let port;
 
@@ -42,7 +47,7 @@ describe('AddItem Function Test', () => {
         expect(res.json.calledWith(createdItem)).to.be.true;
 
         // Restore stubbed methods
-        createStub.restore();
+        // createStub.restore();
     });
 
     it('should return 500 if an error occurs', async () => {
@@ -69,7 +74,7 @@ describe('AddItem Function Test', () => {
         expect(res.json.calledWithMatch({ message: 'DB Error' })).to.be.true;
 
         // Restore stubbed methods
-        createStub.restore();
+        // createStub.restore();
     });
 
 });
@@ -111,7 +116,7 @@ describe('Update Function Test', () => {
         expect(res.json.calledOnce).to.be.true;
 
         // Restore stubbed methods
-        findOneStub.restore();
+        // findOneStub.restore();
     });
 
 
@@ -130,7 +135,7 @@ describe('Update Function Test', () => {
         expect(res.status.calledWith(404)).to.be.true;
         expect(res.json.calledWith({ message: 'Item not found' })).to.be.true;
 
-        findOneStub.restore();
+        // findOneStub.restore();
     });
 
     it('should return 500 on error', async () => {
@@ -147,7 +152,7 @@ describe('Update Function Test', () => {
         expect(res.status.calledWith(500)).to.be.true;
         expect(res.json.called).to.be.true;
 
-        findOneStub.restore();
+        // findOneStub.restore();
     });
 
 
@@ -187,7 +192,7 @@ describe('GetItem Function Test', () => {
         expect(res.status.called).to.be.false; // No error status should be set
 
         // Restore stubbed methods
-        findStub.restore();
+        // findStub.restore();
     });
 
     it('should return 500 on error', async () => {
@@ -209,7 +214,7 @@ describe('GetItem Function Test', () => {
         expect(res.json.calledWithMatch({ message: 'DB Error' })).to.be.true;
 
         // Restore stubbed methods
-        findStub.restore();
+        // findStub.restore();
     });
 
 });
@@ -243,7 +248,7 @@ describe('DeleteItem Function Test', () => {
         expect(res.json.calledWith({ message: 'Item deleted' })).to.be.true;
 
         // Restore stubbed methods
-        findOneStub.restore();
+        // findOneStub.restore();
     });
 
     it('should return 404 if item is not found', async () => {
@@ -268,7 +273,7 @@ describe('DeleteItem Function Test', () => {
         expect(res.json.calledWith({ message: 'Item not found' })).to.be.true;
 
         // Restore stubbed methods
-        findOneStub.restore();
+        // findOneStub.restore();
     });
 
     it('should return 500 if an error occurs', async () => {
@@ -292,7 +297,7 @@ describe('DeleteItem Function Test', () => {
         expect(res.json.calledWithMatch({ message: 'DB Error' })).to.be.true;
 
         // Restore stubbed methods
-        findOneStub.restore();
+        // findOneStub.restore();
     });
 
 });
