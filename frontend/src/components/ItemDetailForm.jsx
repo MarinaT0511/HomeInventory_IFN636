@@ -7,6 +7,13 @@ const categoryMap = {
   C004: "bedRoom",
 };
 
+const reverseCategoryMap = {
+  livingRoom: "C001",
+  kitchen: "C002",
+  bathRoom: "C003",
+  bedRoom: "C004",
+};
+
 const ItemDetailForm = ({
   initialData,
   onSubmit,
@@ -20,7 +27,7 @@ const ItemDetailForm = ({
     itemName: "",
     category: "",
     shop: "",
-    itemPrice: "",
+    price: "",
     modelNum: "",
     serialNum: "",
     purchaseDate: "",
@@ -32,7 +39,7 @@ const ItemDetailForm = ({
         itemName: initialData.itemName || "",
         category: categoryMap[initialData.category] || "",
         shop: initialData.shop || "",
-        itemPrice: initialData.itemPrice || "",
+        price: initialData.price || "",
         modelNum: initialData.modelNum || "",
         serialNum: initialData.serialNum || "",
         purchaseDate: initialData.purchaseDate
@@ -44,7 +51,7 @@ const ItemDetailForm = ({
         itemName: "",
         category: "",
         shop: "",
-        itemPrice: "",
+        price: "",
         modelNum: "",
         serialNum: "",
         purchaseDate: "",
@@ -54,31 +61,38 @@ const ItemDetailForm = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    console.log("form submit called");
+    console.log("formData =", formData);
+    console.log("form submit called");
+
+
+    onSubmit({
+      ...formData,
+      category: reverseCategoryMap[formData.category] || "",
+      price: formData.price === "" ? "" : Number(formData.price),
+    });
   };
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 shadow-md rounded mb-6">
-      <div>
+      <div className="flex justify-between">
         <h1 className="text-2xl font-bold mb-4">
-          {initialData?.itemId || "New Item"}
-          : {readOnly ? "View Item"
-            : isEditMode ? "Edit Item" : "Create Item"
-          }
-          {/* {initialData?.itemId || "New Item"} : {formData.itemName || ""} */}
+          {initialData?.itemId || "New Item"} : {formData.itemName || ""}
         </h1>
 
         {isEditMode && (
           <button
             type="button"
             onClick={onDelete}
-            className="w-full bg-blue-600 text-white p-2 rounded"
+            className="w-full bg-blue-600 text-white p-2 rounded "
+            style={{ width: "10%" }}
           >
             Delete
           </button>
         )}
       </div>
 
+      <label>Item Name</label>
       <input
         type="text"
         placeholder="Washing Machine"
@@ -87,6 +101,7 @@ const ItemDetailForm = ({
         onChange={(e) => setFormData({ ...formData, itemName: e.target.value })}
         className="w-full mb-4 p-2 border rounded"
       />
+      <label>Category</label>
       <select
         value={formData.category}
         disabled={readOnly}
@@ -100,6 +115,7 @@ const ItemDetailForm = ({
         <option value="bedRoom">Bed room</option>
       </select>
 
+      <label>Shop</label>
       <input
         type="text"
         placeholder="JB HI-FI"
@@ -108,16 +124,17 @@ const ItemDetailForm = ({
         onChange={(e) => setFormData({ ...formData, shop: e.target.value })}
         className="w-full mb-4 p-2 border rounded"
       />
-
+      <label>Price</label>
       <input
         type="number"
         placeholder="$1.000"
-        value={formData.itemPrice}
+        value={formData.price}
         readOnly={readOnly}
-        onChange={(e) => setFormData({ ...formData, itemPrice: e.target.value })}
+        onChange={(e) => setFormData({ ...formData, price: e.target.value })}
         className="w-full mb-4 p-2 border rounded"
       />
 
+      <label>Model Number</label>
       <input
         type="text"
         placeholder="ABC123D"
@@ -127,6 +144,7 @@ const ItemDetailForm = ({
         className="w-full mb-4 p-2 border rounded"
       />
 
+      <label>Serial Number</label>
       <input
         type="text"
         placeholder="S/N123456789"
@@ -136,6 +154,7 @@ const ItemDetailForm = ({
         className="w-full mb-4 p-2 border rounded"
       />
 
+      <label>Purchase Date</label>
       <input
         type="date"
         value={formData.purchaseDate}
@@ -143,30 +162,32 @@ const ItemDetailForm = ({
         onChange={(e) => setFormData({ ...formData, purchaseDate: e.target.value })}
         className="w-full mb-4 p-2 border rounded"
       />
-      <button type="button"
-        onClick={onCancel}
-        className="w-full bg-blue-600 text-white p-2 rounded"
-      >
-        {readOnly ? 'Go back to inventory' : 'Cancel'}
-      </button>
-
-      {readOnly && (
+      <div className="flex justify-center items-center" style={{ width: "50%" }}>
         <button type="button"
-          onClick={onEdit}
-          className="w-full bg-blue-600 text-white p-2 rounded"
+          onClick={onCancel}
+          className="w-full bg-blue-600 text-white p-2 rounded mx-2 my-2"
         >
-          Change the detail
+          {readOnly ? 'Go back to inventory' : 'Cancel'}
         </button>
-      )}
 
-      {!readOnly && (
-        <button type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded"
-        >
-          {isEditMode ? 'Update' : 'Create'}
-        </button>
-      )}
-    </form>
+        {readOnly && (
+          <button type="button"
+            onClick={onEdit}
+            className="w-full bg-blue-600 text-white p-2 rounded mx-2 my-2"
+          >
+            Change the detail
+          </button>
+        )}
+
+        {!readOnly && (
+          <button type="submit"
+            className="w-full bg-blue-600 text-white p-2 rounded mx-2 my-2"
+          >
+            {isEditMode ? 'Update' : 'Create'}
+          </button>
+        )}
+      </div>
+    </form >
   );
 };
 

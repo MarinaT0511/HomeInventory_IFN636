@@ -1,10 +1,11 @@
-// import React, { useState } from "react";
 import React, { useState, useEffect } from "react";
 import { AllCommunityModule } from "ag-grid-community";
 import { AgGridProvider, AgGridReact } from "ag-grid-react";
+import { useNavigate } from "react-router-dom";
 // import "../inventory.css";
 
 function UserList() {
+    const navigate = useNavigate();
     //setting to display DB data
     const [rowData, setRowData] = useState([
     ]);
@@ -20,9 +21,12 @@ function UserList() {
             headerName: "Go to Detail",
             width: 120,
             cellClass: "actions-cell",
-            cellRenderer: () => (
+            cellRenderer: (params) => (
                 <div className="actions-inner">
-                    <button className="action-btn">›</button>
+                    <button
+                        className="action-btn"
+                        onClick={() => navigate(`/profile/${params.data.userId}`)}
+                    >›</button>
                 </div>
             ),
         }

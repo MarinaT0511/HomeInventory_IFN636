@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../axiosConfig';
 import ItemDetailForm from '../components/ItemDetailForm';
-// import TaskList from '../components/TaskList';
 import { useAuth } from '../context/AuthContext';
-// import { useParams } from "react-router-dom";
 import { useParams, useNavigate } from 'react-router-dom';
 
 const ItemDetail = ({ mode }) => {
@@ -23,9 +21,6 @@ const ItemDetail = ({ mode }) => {
     useEffect(() => {
         const fetchItem = async () => {
             try {
-                // const response = await axiosInstance.get(`/api/item/${itemId}`, {
-                //     headers: { Authorization: `Bearer ${user.token}` },
-                // });
                 const response = await axiosInstance.get(`/api/item/${itemId}`);
                 console.log('Items detail is found:', response.data);
                 setItem(response.data);
@@ -36,18 +31,15 @@ const ItemDetail = ({ mode }) => {
         };
 
         if (!isCreateMode && itemId) {
-            //temporily comment out
-            // if (!isCreateMode && itemId && user?.token) {
             fetchItem();
         }
     }, [itemId, user?.token, isCreateMode]);
 
     const handleCreate = async (formData) => {
+        console.log("handleCreate called", formData);
         try {
-            const response = await axiosInstance.post(`/api/item`, formData, {
-                headers: { Authorization: `Bearer ${user.token}` },
-            });
 
+            const response = await axiosInstance.post(`/api/item`, formData);
             alert('Item created successfully.');
             navigate(`/inventory/item/${response.data.itemId}`);
         } catch (error) {
@@ -57,11 +49,10 @@ const ItemDetail = ({ mode }) => {
     };
 
     const handleUpdate = async (formData) => {
+        console.log("handleDelete called");
         try {
-            const response = await axiosInstance.put(`/api/item/${itemId}`, formData, {
-                headers: { Authorization: `Bearer ${user.token}` },
-            });
 
+            const response = await axiosInstance.put(`/api/item/${itemId}`, formData);
             setItem(response.data);
             alert('Item updated successfully.');
             navigate(`/inventory/item/${itemId}`);
@@ -72,11 +63,9 @@ const ItemDetail = ({ mode }) => {
     };
 
     const handleDelete = async () => {
+        console.log("handleDelete called");
         try {
-            await axiosInstance.delete(`/api/item/${itemId}`, {
-                headers: { Authorization: `Bearer ${user.token}` },
-            });
-
+            await axiosInstance.delete(`/api/item/${itemId}`);
             alert('Item deleted successfully.');
             navigate(`/inventory`);
         } catch (error) {
@@ -96,6 +85,7 @@ const ItemDetail = ({ mode }) => {
     };
 
     const handleEdit = () => {
+        console.log("handleEdit called");
         navigate(`/inventory/item/${itemId}/edit`);
     };
 
@@ -111,17 +101,7 @@ const ItemDetail = ({ mode }) => {
                 onEdit={handleEdit}
                 isEditMode={isEditMode}
                 readOnly={isViewMode}
-
-            // tasks={tasks}
-            // setTasks={setTasks}
-            // editingTask={editingTask}
-            // setEditingTask={setEditingTask}
             />
-            {/* <TaskList
-                tasks={tasks}
-                setTasks={setTasks}
-                setEditingTask={setEditingTask}
-            /> */}
         </div>
     );
 };
