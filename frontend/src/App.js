@@ -7,8 +7,6 @@ import ItemDetail from './pages/ItemDetail';
 import Inventory from './pages/Inventory';
 import AdminDashboard from './pages/AdminDashboard';
 
-import Test from "./pages/Test";
-
 function App() {
   return (
     <Router>
