@@ -31,8 +31,12 @@ describe('CreateItem Function Test', () => {
             body: { title: "New Item", description: "Item description", deadline: "2025-12-31" }
         };
 
-        // Mock item that would be created
-        const createdItem = { _id: new mongoose.Types.ObjectId(), ...req.body, userId: req.user.id };
+        const lastItem = { itemId: 'I001' };
+        const createdItem = { itemId: 'I002', ...req.body };
+
+        sinon.stub(Item, 'findOne').returns({
+            sort: sinon.stub().resolves(lastItem)
+        });
 
         // Stub Item.create to return the createdItem
         const createStub = sinon.stub(Item, 'create').resolves(createdItem);
@@ -62,7 +66,15 @@ describe('CreateItem Function Test', () => {
         // Mock request data
         const req = {
             user: { id: new mongoose.Types.ObjectId() },
-            body: { title: "New Item", description: "Item description", deadline: "2025-12-31" }
+            body: {
+                itemName: "New Item",
+                category: "Electronics",
+                shop: "JB Hi-Fi",
+                price: 1000,
+                modelNum: "M001",
+                serialNum: "S001",
+                purchaseDate: "2025-12-31"
+            }
         };
 
         // Mock response object
@@ -192,7 +204,7 @@ describe('GetItem Function Test', () => {
         await getItemList(req, res);
 
         // Assertions
-        expect(findStub.calledOnceWith({ userId })).to.be.true;
+        expect(findStub.calledOnceWithExactly()).to.be.true;
         expect(res.json.calledWith(items)).to.be.true;
         expect(res.status.called).to.be.false; // No error status should be set
 
