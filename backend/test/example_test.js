@@ -4,7 +4,12 @@ const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 const sinon = require('sinon');
 const Item = require('../models/Item');
-const { updateItem, getItems, addItem, deleteItem } = require('../controllers/itemController');
+const {
+    updateItem,
+    getItemList,
+    createItem,
+    deleteItem
+} = require('../controllers/itemController');
 const { expect } = chai;
 
 chai.use(chaiHttp);
@@ -17,7 +22,7 @@ let server;
 let port;
 
 
-describe('AddItem Function Test', () => {
+describe('CreateItem Function Test', () => {
 
     it('should create a new item successfully', async () => {
         // Mock request data
@@ -39,7 +44,7 @@ describe('AddItem Function Test', () => {
         };
 
         // Call function
-        await addItem(req, res);
+        await createItem(req, res);
 
         // Assertions
         expect(createStub.calledOnceWith({ userId: req.user.id, ...req.body })).to.be.true;
@@ -67,7 +72,7 @@ describe('AddItem Function Test', () => {
         };
 
         // Call function
-        await addItem(req, res);
+        await createItem(req, res);
 
         // Assertions
         expect(res.status.calledWith(500)).to.be.true;
@@ -184,7 +189,7 @@ describe('GetItem Function Test', () => {
         };
 
         // Call function
-        await getItems(req, res);
+        await getItemList(req, res);
 
         // Assertions
         expect(findStub.calledOnceWith({ userId })).to.be.true;
@@ -207,7 +212,7 @@ describe('GetItem Function Test', () => {
         };
 
         // Call function
-        await getItems(req, res);
+        await getItemList(req, res);
 
         // Assertions
         expect(res.status.calledWith(500)).to.be.true;
