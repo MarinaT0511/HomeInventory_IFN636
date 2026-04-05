@@ -124,7 +124,7 @@ describe('Update Function Test', () => {
     it('should return 404 if item is not found', async () => {
         const findOneStub = sinon.stub(Item, 'findOne').resolves(null);
 
-        const req = { params: { id: new mongoose.Types.ObjectId() }, body: {} };
+        const req = { params: { itemId: new mongoose.Types.ObjectId() }, body: {} };
         const res = {
             status: sinon.stub().returnsThis(),
             json: sinon.spy()
@@ -141,7 +141,7 @@ describe('Update Function Test', () => {
     it('should return 500 on error', async () => {
         const findOneStub = sinon.stub(Item, 'findOne').throws(new Error('DB Error'));
 
-        const req = { params: { id: new mongoose.Types.ObjectId() }, body: {} };
+        const req = { params: { itemId: new mongoose.Types.ObjectId() }, body: {} };
         const res = {
             status: sinon.stub().returnsThis(),
             json: sinon.spy()
@@ -225,7 +225,7 @@ describe('DeleteItem Function Test', () => {
 
     it('should delete a item successfully', async () => {
         // Mock request data
-        const req = { params: { id: new mongoose.Types.ObjectId().toString() } };
+        const req = { params: { itemId: new mongoose.Types.ObjectId().toString() } };
 
         // Mock item found in the database
         const item = { remove: sinon.stub().resolves() };
@@ -243,7 +243,7 @@ describe('DeleteItem Function Test', () => {
         await deleteItem(req, res);
 
         // Assertions
-        expect(findOneStub.calledOnceWith(req.params.itemId)).to.be.true;
+        expect(findOneStub.calledOnceWith({ itemId: req.params.itemId })).to.be.true;
         // expect(item.remove.calledOnce).to.be.true;
         expect(res.json.calledWith({ message: 'Item deleted' })).to.be.true;
 
@@ -268,7 +268,7 @@ describe('DeleteItem Function Test', () => {
         await deleteItem(req, res);
 
         // Assertions
-        expect(findOneStub.calledOnceWith(req.params.itemId)).to.be.true;
+        expect(findOneStub.calledOnceWith({ itemId: req.params.itemId })).to.be.true;
         expect(res.status.calledWith(404)).to.be.true;
         expect(res.json.calledWith({ message: 'Item not found' })).to.be.true;
 
@@ -281,7 +281,7 @@ describe('DeleteItem Function Test', () => {
         const findOneStub = sinon.stub(Item, 'findOneAndDelete').throws(new Error('DB Error'));
 
         // Mock request data
-        const req = { params: { id: new mongoose.Types.ObjectId().toString() } };
+        const req = { params: { itemId: new mongoose.Types.ObjectId().toString() } };
 
         // Mock response object
         const res = {
